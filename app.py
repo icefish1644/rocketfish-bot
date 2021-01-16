@@ -3,6 +3,9 @@ from flask import Flask, request
 import telegram
 from telebot.credentials import bot_token, bot_user_name,URL
 
+print(bot_token)
+print(bot_user_name)
+print(URL)
 
 global bot
 global TOKEN
