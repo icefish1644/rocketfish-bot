@@ -43,14 +43,14 @@ def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
 
 def displayQuote(text):
     if countSpaces(text) > 1:
-        return "Knn invalid quote"
+        return "Knn invalid quote", None
 
     tickerReceived = getTextAfterCommand(text)
 
     try:
         sPrice, sPriceDiff, sCompanyName = getStock(tickerReceived)
     except ImportError:
-        return escapeStrForTelegram("That was probably an invalid quote, please try again."), None
+        return escapeStrForTelegram("Knn invalid quote, please try again."), None
     except KeyError:
         return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again."), None
 
