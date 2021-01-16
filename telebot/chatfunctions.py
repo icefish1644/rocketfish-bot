@@ -53,7 +53,6 @@ def displayQuote(text):
         return escapeStrForTelegram("Knn invalid quote, please try again."), None
     except KeyError:
         return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again."), None
-
     return buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived)
 
 def getStock(symbol):
@@ -63,6 +62,7 @@ def getStock(symbol):
 
     # Fetch the stock symbol Currency
     ticker_meta=yf.Ticker(symbol)
+    # print(ticker_meta)
     ticker_dict=ticker_meta.info
     ticker_json=json.dumps(ticker_dict)
     # print(ticker_json)
@@ -72,6 +72,7 @@ def getStock(symbol):
 
     # Fetch the stock symbol daily data
     ticker=yf.download(symbol, period="1d")
+    # print(ticker)
     #DEBUG: print(ticker)
     if prev_price == 0:
         prev_price=(ticker["Open"][0]).round(2)
@@ -101,5 +102,6 @@ def getStock(symbol):
     # message=message.replace("^","\^")
     # message=message.replace("$","\$")
     # message=urllib.parse.quote_plus(message)
-    
-    return(currency+str("{0:,.2f}".format(price)), price_diff_str, ticker_json['longName'])
+
+
+    return(currency+str("{0:,.2f}".format(price)), price_diff_str, ticker_json['shortName'])
