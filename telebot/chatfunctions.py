@@ -50,9 +50,9 @@ def displayQuote(text):
     try:
         sPrice, sPriceDiff, sCompanyName = getStock(tickerReceived)
     except ImportError:
-        return escapeStrForTelegram("That was probably an invalid quote, please try again.")
+        return escapeStrForTelegram("That was probably an invalid quote, please try again."), None
     except KeyError:
-        return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again.")
+        return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again."), None
 
     return buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived)
 
