@@ -17,12 +17,19 @@ def respond():
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
 
+    print(update)
+
     chat_id = ""
     msg_id = ""
     text = ""
-    boolIsEditedMessage = False
 
-    if update.message is None:
+    boolIsEditedMessage = False
+    boolIsNewGroup = False
+
+    if update.message.chat.type == 'group' and update.message.text is None:
+        chat_id = update.message.chat_id
+        boolIsNewGroup = True
+    elif update.message is None:
         chat_id = update.edited_message.chat.id
         msg_id = update.edited_message.message_id
         text = update.edited_message.text.encode('utf-8').decode()
@@ -44,9 +51,12 @@ def respond():
         # send the welcoming message
         bot.sendMessage(chat_id=chat_id, text=bot_welcome)
 
+    elif boolIsNewGroup:
+        bot.sendMessage(chat_id=chat_id, text="I am a bot Hello World")
+
     elif "/getquote" in text:
         replyText = chatfunctions.displayQuote(text)
-        bot.sendMessage(chat_id=chat_id, text=replyText)
+        bot.sendMessage(chat_id=chat_id, text=replyText, parse_mode=telegram.ParseMode.MARKDOWN_V2)
 
     else:
         try:

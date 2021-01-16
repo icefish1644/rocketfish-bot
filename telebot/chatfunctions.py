@@ -1,8 +1,31 @@
+import yfinance as yf
+import json
+
 def countSpaces(text):
     return text.count(' ')
 
 def getTextAfterCommand(text):
     return text[text.find(' ') + 1:].strip().replace(' ', '')
+
+def escapeStrForTelegram(text):
+    return text.replace(".", "\.").replace("(", "\(").replace("+", "\+").replace(")", "\)").replace("-", "\-")
+
+def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
+    yfUrl = "\n" + "https://finance.yahoo.com/quote/" + tickerReceived + "/"
+    companyNameStr = "_" + sCompanyName + "_\n"
+    tickerStr = "*" + tickerReceived.upper() + "*" + "\n"
+    priceStr = sPrice + sPriceDiff
+
+    if "surged" in sPriceDiff:
+        priceStr = priceStr + "  🚀\n"
+    elif "dropped" in sPriceDiff:
+        priceStr = priceStr + "  💸\n"
+
+    buildStr = tickerStr + companyNameStr + priceStr + yfUrl
+
+    escapedStr = escapeStrForTelegram(buildStr)
+
+    return escapedStr
 
 def displayQuote(text):
     if countSpaces(text) > 1:
@@ -10,7 +33,14 @@ def displayQuote(text):
 
     tickerReceived = getTextAfterCommand(text)
 
-    return "You have provided " + tickerReceived + " as ticker symbol"
+    try:
+        sPrice, sPriceDiff, sCompanyName = getStock(tickerReceived)
+    except ImportError:
+        return escapeStrForTelegram("That was probably an invalid quote, please try again.")
+    except KeyError:
+        return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again.")
+
+    return buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived)
 
 def getStock(symbol):
     currency=''
@@ -47,14 +77,14 @@ def getStock(symbol):
 
     # Build message string with escaping url critical chars
     message=symbol+" @ *"+currency+" "+str("{0:,.2f}".format(price)).replace(',', '\'')+"* "+price_diff_str
-    message=message.replace("-","\-")
-    message=message.replace("+","\+")
-    message=message.replace(".","\.")
-    message=message.replace("(","\(")
-    message=message.replace(")","\)")
-    message=message.replace("?","\?")
-    message=message.replace("^","\^")
-    message=message.replace("$","\$")
+    # message=message.replace("-","\-")
+    # message=message.replace("+","\+")
+    # message=message.replace(".","\.")
+    # message=message.replace("(","\(")
+    # message=message.replace(")","\)")
+    # message=message.replace("?","\?")
+    # message=message.replace("^","\^")
+    # message=message.replace("$","\$")
     # message=urllib.parse.quote_plus(message)
     
-    return(message)
+    return(currency+str("{0:,.2f}".format(price)), price_diff_str, ticker_json['longName'])
