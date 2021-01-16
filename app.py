@@ -2,6 +2,7 @@ import re
 from flask import Flask, request
 import telegram
 from telebot.credentials import bot_token, bot_user_name,URL
+# from telebot.mastermind import get_response 
 
 print(bot_token)
 print(bot_user_name)
@@ -11,7 +12,7 @@ global bot
 global TOKEN
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
-
+ 
 app = Flask(__name__)
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
@@ -26,6 +27,9 @@ def respond():
    text = update.message.text.encode('utf-8').decode()
    # for debugging purposes only
    print("got text message :", text)
+
+   # here we call our super AI
+   response = get_response(text)
    # the first time you chat with the bot AKA the welcoming message
    if text == "/start":
        # print the welcoming message
