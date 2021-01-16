@@ -65,7 +65,7 @@ def respond():
         replyText, keyboardMarkup = chatfunctions.displayQuote(text)
         if keyboardMarkup is not None:
             bot.sendMessage(chat_id=chat_id, text=replyText, reply_to_message_id=msg_id, parse_mode=telegram.ParseMode.MARKDOWN_V2, reply_markup=keyboardMarkup)
-        elif:
+        else:
             bot.sendMessage(chat_id=chat_id, text=replyText, reply_to_message_id=msg_id)
 
     else:
