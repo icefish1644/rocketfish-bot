@@ -1,12 +1,8 @@
-#Add to GitHub
 import re
 from flask import Flask, request
 import telegram
-import json
+from telebot.credentials import bot_token, bot_user_name,URL
 
-import telebot
-from telebot.credentials import bot_token, bot_user_name, URL
-from telebot import chatfunctions
 
 global bot
 global TOKEN
@@ -35,14 +31,12 @@ def respond():
        """
        # send the welcoming message
        bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-    
-   elif text == "/addquote":
-       chatfunctions.addquote(text)
+
 
    else:
        try:
            # clear the message we got from any non alphabets
-           text = re.sub(r"\W", "_", text)
+           text = re.sub(r"W", "_", text)
            # create the api link for the avatar based on http://avatars.adorable.io/
            url = "https://api.adorable.io/avatars/285/{}.png".format(text.strip())
            # reply with a photo to the name the user sent,
@@ -65,6 +59,7 @@ def set_webhook():
 @app.route('/')
 def index():
    return '.'
+
 
 if __name__ == '__main__':
    app.run(threaded=True)
