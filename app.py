@@ -12,6 +12,7 @@ bot = telegram.Bot(token=TOKEN)
  
 app = Flask(__name__)
 
+
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
     # retrieve the message in JSON and then transform it to Telegram object
@@ -25,8 +26,11 @@ def respond():
 
     boolIsEditedMessage = False
     boolIsNewGroup = False
-
-    if update.message.chat.type == 'group' and update.message.text is None:
+    boolIsCallbackQuery = False
+    if update.callback_query is not None:
+        chat_id = update.callback_query.message.chat.id
+        boolIsCallbackQuery = True
+    elif update.message.chat.type == 'group' and update.message.text is None:
         chat_id = update.message.chat_id
         boolIsNewGroup = True
     elif update.message is None:
@@ -52,11 +56,14 @@ def respond():
         bot.sendMessage(chat_id=chat_id, text=bot_welcome)
 
     elif boolIsNewGroup:
-        bot.sendMessage(chat_id=chat_id, text="I am a bot Hello World")
+        bot.sendMessage(chat_id=chat_id, text="I am Rocketing")
+    
+    elif boolIsCallbackQuery:
+        bot.sendMessage(chat_id=chat_id, text="We don't do callbacks")
 
     elif "/getquote" in text:
-        replyText = chatfunctions.displayQuote(text)
-        bot.sendMessage(chat_id=chat_id, text=replyText, parse_mode=telegram.ParseMode.MARKDOWN_V2)
+        replyText, keyboardMarkup = chatfunctions.displayQuote(text)
+        bot.sendMessage(chat_id=chat_id, text=replyText, reply_to_message_id=msg_id, parse_mode=telegram.ParseMode.MARKDOWN_V2, reply_markup=keyboardMarkup)
 
     else:
         try:
@@ -69,7 +76,8 @@ def respond():
             bot.sendPhoto(chat_id=chat_id, photo=url) # , reply_to_message_id=msg_id
         except Exception:
             # if things went wrong
-            bot.sendMessage(chat_id=chat_id, text="There was a problem in the name you used, please enter different name")
+            # bot.sendMessage(chat_id=chat_id, text="There was a problem in the name you used, please enter different name")
+            pass
 
     return 'ok'
 

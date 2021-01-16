@@ -1,5 +1,6 @@
 import yfinance as yf
 import json
+import telegram
 
 def countSpaces(text):
     return text.count(' ')
@@ -10,8 +11,21 @@ def getTextAfterCommand(text):
 def escapeStrForTelegram(text):
     return text.replace(".", "\.").replace("(", "\(").replace("+", "\+").replace(")", "\)").replace("-", "\-")
 
+def makeKeyboard(stringList):
+    keyboard = []
+    for key, value in stringList.items():
+        keyboard.append([telegram.InlineKeyboardButton(key, url=value)])
+
+    return telegram.InlineKeyboardMarkup(keyboard)
+
 def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
-    yfUrl = "\n" + "https://finance.yahoo.com/quote/" + tickerReceived + "/"
+    yfUrl = "https://finance.yahoo.com/quote/" + tickerReceived + "/"
+    finViz = "https://finviz.com/quote.ashx?t=" + tickerReceived
+    tvUrl = "https://www.tradingview.com/chart?symbol=" + tickerReceived
+    stringList = {"View in Yahoo Finance": yfUrl, "View in FinViz": finViz, "View in TradingView" : tvUrl}
+
+    keyboardMarkup = makeKeyboard(stringList)
+    
     companyNameStr = "_" + sCompanyName + "_\n"
     tickerStr = "*" + tickerReceived.upper() + "*" + "\n"
     priceStr = sPrice + sPriceDiff
@@ -21,11 +35,11 @@ def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
     elif "dropped" in sPriceDiff:
         priceStr = priceStr + "  💸\n"
 
-    buildStr = tickerStr + companyNameStr + priceStr + yfUrl
+    buildStr = tickerStr + companyNameStr + priceStr
 
     escapedStr = escapeStrForTelegram(buildStr)
 
-    return escapedStr
+    return escapedStr, keyboardMarkup
 
 def displayQuote(text):
     if countSpaces(text) > 1:
@@ -51,6 +65,7 @@ def getStock(symbol):
     ticker_meta=yf.Ticker(symbol)
     ticker_dict=ticker_meta.info
     ticker_json=json.dumps(ticker_dict)
+    # print(ticker_json)
     ticker_json=json.loads(ticker_json)
     if ticker_json["currency"] != '':
         currency=ticker_json["currency"]
