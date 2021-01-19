@@ -54,8 +54,9 @@ def displayQuote(text):
         return escapeStrForTelegram("Knn invalid quote, please try again."), None
     except KeyError:
         return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again."), None
-    except HTTPError:
-        return escapeStrForTelegram("Don't anyhow leave blanks."), None
+    except Exception as e:
+        if “404” in e:
+            return escapeStrForTelegram("Don't anyhow leave blanks bro."), None
 
     return buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived)
 
