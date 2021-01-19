@@ -2,6 +2,7 @@ import yfinance as yf
 import json
 import telegram
 import requests
+import urllib
 
 def countSpaces(text):
     return text.count(' ')
