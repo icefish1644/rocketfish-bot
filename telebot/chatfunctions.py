@@ -42,7 +42,7 @@ def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
     return escapedStr, keyboardMarkup
 
 def displayQuote(text):
-    if countSpaces(text) > 1:
+    if countSpaces(text) > 1 or text == None:
         return "Knn invalid quote", None
 
     tickerReceived = getTextAfterCommand(text)
@@ -71,8 +71,8 @@ def getStock(symbol):
         currency=ticker_json["currency"]
 
     # Fetch the stock symbol daily data
-    ticker=yf.download(symbol, period="1d")
-    # print(ticker)
+    ticker=yf.download(symbol, period="1d", interval="1m")
+    print(ticker)
     #DEBUG: print(ticker)
     if prev_price == 0:
         prev_price=(ticker["Open"][0]).round(2)
