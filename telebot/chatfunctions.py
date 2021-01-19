@@ -1,6 +1,7 @@
 import yfinance as yf
 import json
 import telegram
+import requests
 
 def countSpaces(text):
     return text.count(' ')
@@ -42,7 +43,7 @@ def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
     return escapedStr, keyboardMarkup
 
 def displayQuote(text):
-    if countSpaces(text) > 1 or text == None:
+    if countSpaces(text) > 1:
         return "Knn invalid quote", None
 
     tickerReceived = getTextAfterCommand(text)
@@ -53,6 +54,9 @@ def displayQuote(text):
         return escapeStrForTelegram("Knn invalid quote, please try again."), None
     except KeyError:
         return escapeStrForTelegram("Can't handle this stock, regularMarketOpen error please try again."), None
+    except requests.HTTPError:
+        return escapeStrForTelegram("Don't anyhow leave blanks."), None
+
     return buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived)
 
 def getStock(symbol):
