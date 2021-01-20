@@ -36,7 +36,6 @@ def buildQuoteResponse(sPrice, sPriceDiff, sCompanyName, tickerReceived):
         priceStr = priceStr + "  🚀\n"
     elif "dropped" in sPriceDiff:
         priceStr = priceStr + "  💸\n"
-
     buildStr = tickerStr + companyNameStr + priceStr
 
     escapedStr = escapeStrForTelegram(buildStr)
@@ -71,13 +70,13 @@ def getStock(symbol):
     # print(ticker_meta)
     ticker_dict=ticker_meta.info
     ticker_json=json.dumps(ticker_dict)
-    # print(ticker_json)
+    print(ticker_json)
     ticker_json=json.loads(ticker_json)
     if ticker_json["currency"] != '':
         currency=ticker_json["currency"]
 
     # Fetch the stock symbol daily data
-    ticker=yf.download(symbol, period="1d", interval="1m")
+    ticker=yf.download(symbol, period="1d")
     print(ticker)
     #DEBUG: print(ticker)
     if prev_price == 0:
@@ -111,3 +110,5 @@ def getStock(symbol):
 
 
     return(currency+str("{0:,.2f}".format(price)), price_diff_str, ticker_json['shortName'])
+
+#Fetch Pre-market info from Nasdaq
