@@ -30,7 +30,7 @@ def respond():
     if update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
         boolIsCallbackQuery = True
-    elif update.update_id == 814315960 or update.update_id == 814315965 or update.update_id == 814315971 or update.update_id == 814315975 or update.update_id == 814315967 or update.update_id == 814315972:
+    elif update.update_id == 814315960 or update.update_id == 814315965 or update.update_id == 814315961 or update.update_id == 814315976 or update.update_id == 814315971 or update.update_id == 814315975 or update.update_id == 814315967 or update.update_id == 814315972:
         pass
     elif update.message.chat.type == 'group' and update.message.text is None:
         chat_id = update.message.chat_id
