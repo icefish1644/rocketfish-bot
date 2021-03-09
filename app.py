@@ -33,6 +33,11 @@ def respond():
     elif update.message.chat.type == 'group' and update.message.text is None:
         chat_id = update.message.chat_id
         boolIsNewGroup = True
+    elif update.edited_message is not None:
+        chat_id = update.edited_message.chat.id
+        msg_id = update.edited_message.message_id
+        text = update.edited_message.text.encode('utf-8').decode()
+        boolIsEditedMessage = True
     elif update.message is None:
         chat_id = update.edited_message.chat.id
         msg_id = update.edited_message.message_id
