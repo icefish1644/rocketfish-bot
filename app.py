@@ -30,7 +30,7 @@ def respond():
     if update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
         boolIsCallbackQuery = True
-    elif update.edited_message.chat.type == 'group':
+    elif update.edited_message.chat.type == 'group' and update.message.text is None:
         chat_id = update.edited_message.chat.id
         msg_id = update.edited_message.message_id
         text = update.edited_message.text.encode('utf-8').decode()
