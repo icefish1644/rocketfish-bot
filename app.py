@@ -30,7 +30,7 @@ def respond():
     if update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
         boolIsCallbackQuery = True
-    elif update.update_id == 814315960  or update.update_id == 814315961  or update.update_id == 814315962  or update.update_id == 814315963  or update.update_id == 814315964 or update.update_id == 814315965 or update.update_id == 814315966 or update.update_id == 814315967 or update.update_id == 814315968 or update.update_id == 814315969 or update.update_id == 814315970  or update.update_id == 814315971  or update.update_id == 814315972 or update.update_id == 814315973  or update.update_id == 814315974  or update.update_id == 814315975  or update.update_id == 814315976  or update.update_id == 814315977  or update.update_id == 814315978:
+    elif update.update_id == 814315960 or update.update_id == 814315961 or update.update_id == 814315962 or update.update_id == 814315963 or update.update_id == 814315964 or update.update_id == 814315965 or update.update_id == 814315966 or update.update_id == 814315967 or update.update_id == 814315968 or update.update_id == 814315969 or update.update_id == 814315970 or update.update_id == 814315971 or update.update_id == 814315972 or update.update_id == 814315973 or update.update_id == 814315974 or update.update_id == 814315975 or update.update_id == 814315976 or update.update_id == 814315977 or update.update_id == 814315978:
         pass
     elif update.message.chat.type == 'group' and update.message.text is None:
         chat_id = update.message.chat_id
