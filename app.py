@@ -30,11 +30,8 @@ def respond():
     if update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
         boolIsCallbackQuery = True
-    elif update.edited_message.chat.type == 'group' and update.message.text is None:
-        chat_id = update.edited_message.chat.id
-        msg_id = update.edited_message.message_id
-        text = update.edited_message.text.encode('utf-8').decode()
-        boolIsEditedMessage = True
+    elif update.update_id == 814315960 or update.update_id == 814315965 or update.update_id == 814315971 or update.update_id == 814315975:
+        break
     elif update.message.chat.type == 'group' and update.message.text is None:
         chat_id = update.message.chat_id
         boolIsNewGroup = True
